@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Album | Music Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-</head>
-<body>
-<div class="container">
+@extends('layouts.master')
+
+@section('title', 'Create Album | Music Hub')
+
+@section('content')
     <h1>Create Album</h1>
     <p>Fill out the form below to add a new album.</p>
 
@@ -17,25 +11,21 @@
             {{ session('success') }}
         </div>
     @endif
-
     @if(session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
     @endif
-
     <form action="{{ route('albums.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="name">Album Name:</label>
             <input type="text" id="name" name="name" required>
         </div>
-
         <div class="form-group">
             <label for="releaseDate">Release Date:</label>
             <input type="date" id="releaseDate" name="release_date" required>
         </div>
-
         <div class="form-group">
             <label for="band_id">Select Band:</label>
             <select id="band_id" name="band_id" required>
@@ -57,8 +47,6 @@
     </form>
 
     <div class="back-link">
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Back to Admin Dashboard</a>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Back to Admin Dashboard</a>
     </div>
-</div>
-</body>
-</html>
+@endsection

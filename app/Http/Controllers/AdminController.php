@@ -9,10 +9,5 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboard() {
-        $bands = Band::all();
-        $albums = Album::all();
 
-        return view('adminViews/admin-dashboard', compact('bands', 'albums'));
-    }
 }

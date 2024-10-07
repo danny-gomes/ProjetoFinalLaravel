@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Band | Music Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/bands.css') }}">
-</head>
-<body>
-<div class="container">
+@extends('layouts.master')
+
+@section('title', 'Edit Band | Music Hub')
+
+@section('content')
     <h1>Edit Band</h1>
 
     <div class="back-btn">
@@ -35,6 +29,4 @@
             <button type="submit" class="btn">Update Band</button>
         </div>
     </form>
-</div>
-</body>
-</html>
+@endsection

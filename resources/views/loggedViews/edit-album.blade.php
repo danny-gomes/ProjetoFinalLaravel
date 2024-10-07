@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Album | Music Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/bands.css') }}"> <!-- Use your existing CSS -->
-</head>
-<body>
-<div class="container">
+@extends('layouts.master')
+
+@section('title', 'Edit Album | Music Hub')
+
+@section('content')
     <h1>Edit Album</h1>
 
     <div class="back-btn">
@@ -67,6 +61,4 @@
             <button type="submit" class="btn">Update Album</button>
         </div>
     </form>
-</div>
-</body>
-</html>
+@endsection

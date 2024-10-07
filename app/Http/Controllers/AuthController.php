@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Album;
+use App\Models\Band;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,20 +17,35 @@ class AuthController extends Controller
         // Auth::attempt verifica se credencias sao validas
         if (Auth::attempt($credentials)) {
 
-            // Guardar o usuario autenticado localmente
+            // Guardar o user autenticado localmente
             $user = Auth::user();
 
-            // Ver o role do user
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard')->with('success', 'Welcome, admin!');
-            } else {
-                return redirect()->route('user.dashboard')->with('success', 'Welcome, ' . $user->name . '!');
-            }
+            return redirect()->route('dashboard')->with('success', 'Welcome, ' . $user->name);
         }
 
         // If login fails, redirect back with an error
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+
+        $request->session()->invalidate();
+
+
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'You have been logged out.');
+    }
+
+    public function dashboard() {
+        $bands = Band::all();
+        $albums = Album::all();
+
+        return view('loggedViews/dashboard', compact('bands', 'albums'));
     }
 }

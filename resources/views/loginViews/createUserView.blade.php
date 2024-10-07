@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Hub | Create Account</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-</head>
-<body>
-<div class="container">
+@extends('layouts.master')
+
+@section('title', 'Music Hub | Create Account')
+
+@section('content')
     <h1>Create Your Account</h1>
     <p>Join Music Hub and discover your favorite bands and albums.</p>
+
     @if ($errors->any())
         <div class="error-messages">
             <ul>
@@ -49,6 +44,4 @@
     <div class="account-links">
         <a href="{{ route('login') }}" class="btn">Already have an account? Login</a>
     </div>
-</div>
-</body>
-</html>
+@endsection

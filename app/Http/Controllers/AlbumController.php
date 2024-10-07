@@ -13,11 +13,20 @@ class AlbumController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $albums = Album::all();
+        $bandId = $request->query('band_id');
+        $search = $request->query('search');
 
-        return view('adminViews/admin-albums', compact('albums'));
+        if ($bandId) {
+            $albums = Album::where('band_id', $bandId)->get();
+        } else if ($search) {
+            $albums = Album::where('title', 'like', '%' . $search . '%')->get();
+        } else {
+            $albums = Album::all();
+        }
+
+        return view('loggedViews/view-albums', compact('albums'));
     }
 
     /**
@@ -28,7 +37,7 @@ class AlbumController extends Controller
         $bands = Band::all();
 
 
-        return view('adminViews/create-album', compact('bands'));
+        return view('loggedViews/create-album', compact('bands'));
     }
 
     /**
@@ -72,7 +81,7 @@ class AlbumController extends Controller
         $bands = Band::all();
         $album = Album::findOrFail($id);
 
-        return view('adminViews.edit-album', compact('album', 'bands'));
+        return view('loggedViews/edit-album', compact('album', 'bands'));
     }
 
     /**

@@ -8,8 +8,12 @@ use App\Http\Controllers\AlbumController; // Import AlbumController
 use App\Http\Middleware\CheckAdmin;
 use Illuminate\Support\Facades\Route;
 
-// Login Routes
+// Login
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('dashboard')->with('success', 'You are already logged in.');
+    }
+
     return view('loginViews/loginView');
 })->name('login');
 
@@ -18,16 +22,26 @@ Route::post('/login', [AuthController::class, 'login'])->name('checkLogin');
 Route::get('/users/add', [UserController::class, 'getAddUserView'])->name('login.addUserView');
 Route::post('users/create-user', [UserController::class, 'register'])->name('login.registerUser');
 
-// User Dashboard Route
-Route::get('/user/dashboard', [UserController::class, 'dashboard'])->middleware('auth')->name('user.dashboard');
+// Dashboard
+Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
-// Admin Dashboard Route
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', CheckAdmin::class])->name('admin.dashboard');
+// Banda
+Route::resource('bands', BandController::class)->except(['index']);
+// Nao quero middleware no index, todos podem ver a lista de bandas e albuns a partir da barra de endereco
+Route::get('bands', [BandController::class, 'index'])->name('bands.index');
 
-// Band Routes
-Route::resource('bands', BandController::class)->except(['show']);
-Route::get('bands/create-band/', [BandController::class, 'getCreateBandView'])->name('band.createBandView');
 
-// Album Routes
-Route::resource('albums', AlbumController::class)->except(['show']);
+// Album
+Route::resource('albums', AlbumController::class)->except(['index']);
+// Nao quero middleware no index, todos podem ver a lista de bandas e albuns a partir da barra de endereco
+Route::get('albums', [AlbumController::class, 'index'])->name('albums.index');
+
+// Aplicar middleware as rotas recurso especificas
+Route::middleware(['auth'])->group(function () {
+    Route::resource('bands', BandController::class)->only(['create', 'store', 'show', 'edit', 'update', 'destroy']);
+    Route::resource('albums', AlbumController::class)->only(['create', 'store', 'show', 'edit', 'update', 'destroy']);
+});
+
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
 

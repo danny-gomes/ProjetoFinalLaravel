@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Band;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BandController extends Controller
@@ -14,9 +15,14 @@ class BandController extends Controller
      */
     public function index()
     {
-        $bands = Band::all();
+        // Encontrei esta funcao withCount para listar os albuns produzidos, desde que tenha as relacoes entre as tabelas estabalecidas
+        // (hasMany, belongs to) no modelo ele funciona, foi isso que percebi acho que e isso.
+        // Se passar o withCount com albums ele automaticamente cria uma variavel albums_count e guarda a dentro de bands tambem,
+        // entao ele vai a tabela albums contar a quantidade de vezes que o id de uma banda aparece na tabela albums e guarda no albums_count
+        // de cada registo de banda nesta variavel
+        $bands = Band::withCount('albums')->get();
 
-        return view('adminViews/admin-bands', compact('bands'));
+        return view('loggedViews/view-bands', compact('bands'));
     }
 
     /**
@@ -24,7 +30,7 @@ class BandController extends Controller
      */
     public function create()
     {
-        return view('adminViews/create-band');
+        return view('loggedViews/create-band');
     }
 
     /**
@@ -65,7 +71,11 @@ class BandController extends Controller
     {
         $band = Band::findOrFail($id);
 
-        return view('adminViews/edit-band', compact('band'));
+
+        if(Auth::check()){
+            return view('loggedViews/edit-band', compact('band'));
+        }
+        return redirect()->route('login');
     }
 
     /**

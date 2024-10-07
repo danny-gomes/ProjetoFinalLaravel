@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Albums | Music Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/bands.css') }}">
-</head>
-<body>
-<div class="container">
+@extends('layouts.master')
+
+@section('title', 'Manage Albums | Music Hub')
+
+@section('content')
     <h1>Manage Albums</h1>
 
     <div class="back-btn">
-        <a href="{{ route('admin.dashboard') }}" class="btn">Back to Admin Dashboard</a>
+        <a href="{{ route('dashboard') }}" class="btn">Back to Dashboard</a>
+        <a href="{{ route('bands.index') }}" class="btn">Back to Bands</a>
     </div>
 
     <div class="search-container">
@@ -39,17 +34,19 @@
                     <p>Release Date: {{ \Carbon\Carbon::parse($album->release_date)->format('F j, Y') }}</p>
                     <p>Band: {{ $album->band->name }}</p>
                 </div>
-                <div class="band-actions">
-                    <a href="{{ route('albums.edit', $album->id) }}" class="btn">Edit</a>
-                    <form action="{{ route('albums.destroy', $album->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn" onclick="return confirm('Are you sure?')">Delete</button>
-                    </form>
-                </div>
+                @if (Auth::check())
+                    <div class="band-actions">
+                        <a href="{{ route('albums.edit', $album->id) }}" class="btn">Edit</a>
+                        @if (Auth::check() && Auth::user()->role == 'admin')
+                        <form action="{{ route('albums.destroy', $album->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                        @endif
+                    </div>
+                @endif
             </div>
         @endforeach
     @endif
-</div>
-</body>
-</html>
+@endsection
