@@ -49,7 +49,7 @@ class AlbumController extends Controller
             'name' => 'required|string|max:255',
             'release_date' => 'required|date',
             'band_id' => 'required|exists:bands,id',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048', // Validate image type and size
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $imagePath = $request->file('image')->store('albums', 'public');
